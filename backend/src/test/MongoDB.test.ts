@@ -1,8 +1,6 @@
-import { response } from 'express';
-import { Types } from 'mongoose';
 import { Item } from '../entitites/Todoslist';
 import TodoRepositoryMongoDB from '../infra/TodoRepositoryMongoDB';
-describe('Testing mongo db operations',() =>{
+describe.skip('Testing mongo db operations',() =>{
     afterAll(()=>{
         repository.close();
     })
