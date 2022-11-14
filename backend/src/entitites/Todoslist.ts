@@ -1,4 +1,4 @@
-export type Item = {
+export interface Item  {
   id?: string;
   description: string;
   done: boolean;

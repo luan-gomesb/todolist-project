@@ -1,5 +1,5 @@
 import { setTextRange, tokenToString } from 'typescript';
-import Todolist, { Item } from '../Todoslist';
+import Todolist, { Item } from '../entitites/Todoslist';
 const getItem = (description: string): Item => {
   return { description, done: false } as Item;
 };
@@ -10,6 +10,7 @@ describe('test Todoslist Entity', () => {
     todlist.addItem(getItem('Teste item'));
     expect(todlist.size()).toBe(1);
   });
+
   test('should create return all itens', () => {
     const todolist = new Todolist();
     todolist.addItem(getItem('first item'));

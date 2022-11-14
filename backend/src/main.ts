@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import Todolist, { Item } from './Todoslist';
+import Todolist, { Item } from './entitites/Todoslist';
 const app = express();
 app.use(express.json());
 
@@ -14,11 +14,13 @@ initialTodos.forEach((item) => todos.addItem(item));
 app.get('/todos', (req: Request, res: Response) => {
   res.json(todos.getTodos());
 });
+
 app.post('/todos', (req: Request, res: Response) => {
   const item = req.body;
   todos.addItem(item);
   res.status(200).send();
 });
+
 app.put('/todos', (req: Request, res: Response) => {
   const item = req.body;
   todos.toggle(item);
@@ -32,4 +34,5 @@ app.delete('/todos/${id}', (req: Request, res: Response) => {
   }
   res.status(200).send();
 });
+
 app.listen(4000);
