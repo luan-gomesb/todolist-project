@@ -18,19 +18,25 @@ export default class TodoRepositoryMongoDB implements TodoRepository {
     async findById(id: string): Promise<Item|null> {
         return await this.todoModel.findById(id).exec();
     }
-    async list(): Promise<any> {
-        return await this.todoModel.find()
+    async list(): Promise<Item[]> {
+        const items = await this.todoModel.find();
+        return items.map(item =>{ return {id:item._id.toString(),description:item.description,done:item.done} as Item});
     }
     async save(item:Item): Promise<Item> {
         const todoItem = new this.todoModel(item);
         return await todoItem.save();
     }
     async update(item: Item): Promise<boolean> {
-        const ret =  await this.todoModel.updateOne(item,{done:item.done});
+        const ret =  await this.todoModel.updateOne({_id:item.id},{done:item.done});
         return ret.acknowledged;
     }
     async find(param: ItemFind): Promise<Item[]> {
-        return this.todoModel.find(param);
+        return await this.todoModel.find(param);
+    }
+    async remove(id: string): Promise<boolean> {
+        // const response =  await this.todoModel.findByIdAndDelete(id);
+        const response =  await this.todoModel.deleteOne({_id:id});
+        return response.acknowledged;
     }
     async close(){
         mongoose.connection.close();
