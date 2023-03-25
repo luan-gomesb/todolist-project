@@ -15,7 +15,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     image: luangomesb/todolist_backend
-    container_name: todolist_backend
+    container_name: backend
     ports:
       - "4000:4000"
     networks:
@@ -26,15 +26,13 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     image: luangomesb/todolist_frontend
-    container_name: todolist_frontend
+    container_name: frontend
     ports:
       - "3000:3000"
     networks:
       - todo_networks
     volumes:
-      - .:/app
-      - /app/node_modules
-      - /app/.next
+      - ./frontend:/app
 networks:
   todo_networks:
     driver: bridge
