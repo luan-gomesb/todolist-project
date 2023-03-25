@@ -1,3 +1,5 @@
+import TodoRepository from "../infra/TodoRepository";
+
 export interface Item  {
   id?: string;
   description: string;
@@ -5,11 +7,12 @@ export interface Item  {
 };
 export default class Todolist {
   todos: Item[];
-  constructor() {
+  constructor(private repository:TodoRepository) {
     this.todos = [];
   }
-  getTodos(): Item[] {
-    return this.todos;
+  async getTodos(): Item[] {
+    return await this.repository.list();
+    // return this.todos;
   }
   addItem(item: Item) {
     if (!item.id) {

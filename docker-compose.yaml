@@ -1,0 +1,42 @@
+version: "3"
+
+services:
+  mongodb: 
+    image: mongo
+    container_name: mongo_todo
+    ports:
+      - "27017:27017"
+    networks:
+      - todo_networks
+
+
+  mongo-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: luangomesb/todolist_backend
+    container_name: todolist_backend
+    ports:
+      - "4000:4000"
+    networks:
+      - todo_networks
+
+  todo-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: luangomesb/todolist_frontend
+    container_name: todolist_frontend
+    ports:
+      - "3000:3000"
+    networks:
+      - todo_networks
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+networks:
+  todo_networks:
+    driver: bridge
+
+    

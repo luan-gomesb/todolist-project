@@ -6,7 +6,6 @@ const app = express();
 app.use(express.json());
 app.use(cors())
 
-const todos = new Todolist();
 const repository = new TodoRepositoryMongoDB();
 const logger = (req: Request, res: Response,next:NextFunction) => {
   console.log('url:',req.url);
@@ -17,6 +16,9 @@ const logger = (req: Request, res: Response,next:NextFunction) => {
   // console.log('headers',req.headers);
   next();
 }
+
+//httpServe -> constroller->casodeuso -> repositorio -> banco
+
 app.get('/todos',logger, async (req: Request, res: Response,) => {
   const getall = await repository.list();
   res.json(getall);

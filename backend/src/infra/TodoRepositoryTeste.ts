@@ -2,27 +2,20 @@ import TodoRepository, { ItemFind } from "./TodoRepository";
 import mongoose,{isObjectIdOrHexString, Model, Schema, Types} from 'mongoose'
 import { Item } from '../entitites/Todoslist';
 
-export default class TodoRepositoryMongoDB implements TodoRepository {
-    todoScheme:Schema<Item>;
-    todoModel:Model<Item>;
-
+export default class TodoRepositoryPrisma implements TodoRepository {
+    
+    list : Item[]
     constructor() {
-        mongoose.connect('mongodb://mongo_todo:27017/todolistdb');
-         this.todoScheme = new Schema<Item>({
-            description: { type: String, required: true },
-            done: { type: Boolean, required: true },
-        });
-
-        this.todoModel = mongoose.model<Item>('todos', this.todoScheme);
+       this.list = []; 
+         
     }
 
     async findById(id: string): Promise<Item|null> {
-        return await this.todoModel.findById(id).exec();
+        return this.list[id]
     }
 
     async list(): Promise<Item[]> {
-        const items = await this.todoModel.find();
-        return items.map(item =>{ return {id:item._id.toString(),description:item.description,done:item.done} as Item});
+       return this.list; 
     }
     async save(item:Item): Promise<Item> {
         const todoItem = new this.todoModel(item);

@@ -6,12 +6,12 @@ describe('teste api /todos endpoint', ()=> {
     const EP = "/todos";
     const api = axios.create({baseURL});
 
-    test.skip('get /todos to list todos',async () => {
+    test('get /todos to list todos',async () => {
         const response = await api.get(EP);
         const items = await response.data;
         expect(items).toBeDefined();
     });
-    test.skip('post /todos -  inset a todo item', async () =>{
+    test('post /todos -  inset a todo item', async () =>{
         const item:Item = {description:"api item insert",done:false};
         const response = await api.post(EP,item)
        const newItem:Item = await response.data;
@@ -30,7 +30,7 @@ describe('teste api /todos endpoint', ()=> {
         expect(updatedItem.id).toBe(newItem.id);
         expect(updatedItem.done).toBe(true);
     })
-    test.skip('delete /todos/:id -  remove an item rom database',async () => {
+    test('delete /todos/:id -  remove an item rom database',async () => {
         const item:Item = {description:"Insert item and update the status",done:false};
         const response = await api.post(EP,item)
         const newItem : Item =await response.data; 

@@ -2,7 +2,7 @@ import TodoRepository, { ItemFind } from "./TodoRepository";
 import mongoose,{isObjectIdOrHexString, Model, Schema, Types} from 'mongoose'
 import { Item } from '../entitites/Todoslist';
 
-export default class TodoRepositoryMongoDB implements TodoRepository {
+export default class TodoRepositoryPrisma implements TodoRepository {
     todoScheme:Schema<Item>;
     todoModel:Model<Item>;
 

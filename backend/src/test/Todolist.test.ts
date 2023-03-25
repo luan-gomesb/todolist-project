@@ -1,4 +1,5 @@
 import Todolist, { Item } from '../entitites/Todoslist';
+import TodoRepositoryMongoDB from '../infra/TodoRepositoryMongoDB';
 const getItem = (description: string): Item => {
   return { description, done: false } as Item;
 };
@@ -11,7 +12,7 @@ describe.skip('test Todoslist Entity', () => {
   });
 
   test('should create return all itens', () => {
-    const todolist = new Todolist();
+    const todolist = new Todolist(new TodoRepositoryTest());
     todolist.addItem(getItem('first item'));
     todolist.addItem(getItem('second item'));
     expect(todolist.getTodos()).toHaveLength(2);
