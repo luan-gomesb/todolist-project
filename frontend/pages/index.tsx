@@ -30,27 +30,25 @@ export default function Home(props: homeProps) {
 		);
 		todolist.current.register(
 			new TodoListObserver("delete", async (event: string, { id }: Item) => {
-				console.log(apiURl, id);
+				if (!id) return false;
 				var response = await axios.delete(apiURl + `/todos/${id}`);
 				console.log(response);
 			})
 		);
 		todolist.current.register(
-			new TodoListObserver(
-				"create",
-				async (event: string, { description, done }: Item) => {
-					console.log(apiURl, description);
-					var response = await axios.post(apiURl + `/todos/`, {
-						description,
-						done,
-					});
-				}
-			)
+			new TodoListObserver("create", async (event: string, item: Item) => {
+				const { id, description, done } = item;
+				var response = await axios.post(apiURl + `/todos/`, {
+					description,
+					done,
+				});
+				let responseId = response.data.id;
+				todosDispatch("updateId", { id, newid: responseId });
+				console.log(response);
+			})
 		);
 	}, []);
-	const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
-		setTodo(e.currentTarget.value);
-	};
+
 	const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
 		if (e.key == "Enter") {
 			const description = e.currentTarget.value;
@@ -67,6 +65,7 @@ export default function Home(props: homeProps) {
 
 	const handleDelete = (e: React.FormEvent<HTMLSpanElement>) => {
 		const id = e.currentTarget.dataset.key;
+		console.log(id);
 		todosDispatch("remove", { id });
 	};
 
@@ -86,7 +85,7 @@ export default function Home(props: homeProps) {
 						name="todo"
 						id="todo"
 						value={todo}
-						onChange={handleChange}
+						onChange={(e) => setTodo(e.target.value)}
 						onKeyUp={handleEnter}
 					/>
 				</div>
