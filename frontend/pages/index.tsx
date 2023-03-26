@@ -120,7 +120,7 @@ export const getServerSideProps = async (
 	context: GetServerSidePropsContext
 ) => {
 	// console.log(process.env.NEXT_PUBLICAPI);
-	const response = await fetch("http://backend:4000/todos");
+	const response = await fetch("http://localhost:3000/api/todos");
 	const todos: Item[] = await response.json();
 	console.log("backend:", todos);
 	return {

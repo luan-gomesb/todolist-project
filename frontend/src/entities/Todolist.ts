@@ -39,12 +39,13 @@ export default class TodoList extends Observable {
 		return Math.random().toString().substring(2, 6);
 	}
 
-	toggle(id: string): void {
+	toggle(id: string): Item | null {
 		const index = this.getIndex(id);
 		if (index != null && index >= 0) {
 			this.items[index].done = !this.getItem(id)!.done;
 			this.notify("update", this.items[index]);
 		}
+		return this.getItem(id);
 	}
 	remove(id: string): void {
 		const removedItem = this.getItem(id);
