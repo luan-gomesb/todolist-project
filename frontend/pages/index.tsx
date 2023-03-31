@@ -16,37 +16,10 @@ type homeProps = {
 };
 
 export default function Home(props: homeProps) {
-	const apiURl = process.env.NEXT_PUBLIC_API;
 	const [todo, setTodo] = useState<string>("");
 	const todolist = useRef(new TodoList(props.data as Item[]));
 	const [todos, todosDispatch] = useTodoListHook(todolist.current);
 	useEffect(() => {
-		todolist.current.register(
-			new TodoListObserver("update", async (event: string, item: Item) => {
-				console.log(JSON.stringify(item));
-				var response = await axios.put(apiURl + "/todos", item);
-				console.log(response);
-			})
-		);
-		todolist.current.register(
-			new TodoListObserver("delete", async (event: string, { id }: Item) => {
-				if (!id) return false;
-				var response = await axios.delete(apiURl + `/todos/${id}`);
-				console.log(response);
-			})
-		);
-		todolist.current.register(
-			new TodoListObserver("create", async (event: string, item: Item) => {
-				const { id, description, done } = item;
-				var response = await axios.post(apiURl + `/todos/`, {
-					description,
-					done,
-				});
-				let responseId = response.data.id;
-				todosDispatch("updateId", { id, newid: responseId });
-				console.log(response);
-			})
-		);
 	}, []);
 
 	const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {

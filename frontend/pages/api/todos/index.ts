@@ -24,6 +24,4 @@ export default function handler(
 
     res.status(200).send(item);
   }
-
-
 }
