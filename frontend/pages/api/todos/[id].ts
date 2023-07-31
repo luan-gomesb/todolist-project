@@ -1,6 +1,6 @@
 
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { Item } from '../../../src/entities/Todolist';
+import { Item } from './Todolist';
 import TodolistService from './TodolistService';
 
 const tdList = TodolistService.getInstance();

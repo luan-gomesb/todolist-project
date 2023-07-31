@@ -1,20 +1,29 @@
-import Observable from "../Observable";
+import Observable from "../../../src/Observable";
 
 export type Item = {
-    id: string;
+    id?: string | null;
     description: string;
     done: boolean;
 };
-export default function TodoList2(itens: Item[] = [], observer?:Observable){
+export type Todolist = {
+    list: () => Item[];
+    load: (newItens: Item[]) => Item[];
+    create: (description: string) => Item;
+    toggle: (id: string) => Item | null;
+    remove: (id: string) => void;
+    updateId: (id: string, newid: string) => boolean;
+}
+export default function TodoList(itens: Item[] = [], observer?: Observable) {
 
-     const getIndex = (id: string): number | null => {
+    const getIndex = (id: string): number | null => {
         const item = getItem(id);
         return item ? itens.indexOf(item) : null;
     }
-     const getItemIndex = (id: Item): number  =>{
+
+    const getItemIndex = (id: Item): number => {
         return itens.indexOf(id);
     }
-     const getId = () :  string => {
+    const getId = (): string => {
         return Math.random().toString().substring(2, 6);
     }
 
@@ -23,8 +32,12 @@ export default function TodoList2(itens: Item[] = [], observer?:Observable){
         return item || null;
     }
 
-    const list = () : Item[] => {
-        return  itens;
+    const list = (): Item[] => {
+        return itens.concat([]);
+    }
+    const load = (newItens: Item[]) => {
+        itens = [...itens, ...newItens];
+        return [...itens];
     }
     const create = (description: string): Item => {
         const item: Item = {
@@ -37,17 +50,18 @@ export default function TodoList2(itens: Item[] = [], observer?:Observable){
         return item;
     }
 
-    const toggle = (id: string): Item | null  => {
+    const toggle = (id: string): Item | null => {
         let target = null;
         itens = itens.map(item => {
-            if(item.id == id) {
-                target = {...item, done: !item.done};
-                return  target
-            } 
-            return item; });
-            if(target){
-            observer?.notify("update", target);
+            if (item.id == id) {
+                target = { ...item, done: !item.done };
+                return target
             }
+            return item;
+        });
+        if (target) {
+            observer?.notify("update", target);
+        }
         return target;
     }
 
@@ -65,5 +79,5 @@ export default function TodoList2(itens: Item[] = [], observer?:Observable){
         item.id = newid;
         return true;
     }
-    return {list, create, toggle,remove,updateId }
+    return { list, load, create, toggle, remove, updateId }
 }

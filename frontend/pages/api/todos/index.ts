@@ -1,6 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
-import TodoList, { Item } from '../../../src/entities/Todolist';
+import TodoList, { Item } from './Todolist';
 import TodolistService from './TodolistService';
 
 const tdList = TodolistService.getInstance();

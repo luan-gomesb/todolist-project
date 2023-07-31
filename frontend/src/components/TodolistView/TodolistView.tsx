@@ -1,11 +1,13 @@
 
-import { Item } from "../../entities/Todolist";
+import { MouseEventHandler } from "react";
+import { Item } from "../../../pages/api/todos/Todolist";
 import styles from "./TodolistView.module.css";
+
 type props = {
 	children?: React.ReactNode;
 	item: Item;
-	ontoggle: (React.FormEvent<HTMLSpanElement, MouseEvent>);
-	ondelete: (React.FormEvent<HTMLSpanElement, MouseEvent>);
+	ontoggle: (MouseEventHandler<HTMLSpanElement>);
+	ondelete: (MouseEventHandler<HTMLSpanElement>);
 }
 
 export default function TodolistView(props: props) {
@@ -13,6 +15,7 @@ export default function TodolistView(props: props) {
 	return (
 		<div key={item.id} className={item.done ? styles.itemdone : ""}>
 			<div>
+				<span>{item.id} - </span>
 				<span data-key={item.id} onClick={e => ontoggle(e)}>
 					{item.description} - {item.done.toString()}
 				</span>{" "}

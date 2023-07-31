@@ -1,63 +1,77 @@
 import Observable from "../Observable";
 
 export type Item = {
-	id: string;
-	description: string;
-	done: boolean;
+    id?: string | null;
+    description: string;
+    done: boolean;
 };
-export default class TodoList extends Observable {
-	items: Item[];
-	constructor(items: Item[] = []) {
-		super();
-		this.items = items;
-	}
-	list() {
-		return this.items;
-	}
-	create(description: string): Item {
-		const item: Item = {
-			id: this.getId(),
-			description,
-			done: false,
-		};
-		this.items.push(item);
-		this.notify("create", item);
-		return item;
-	}
-	getItem(id: string): Item | null {
-		const [item] = this.items.filter(({ id: todo }) => todo == id);
-		return item || null;
-	}
-	private getIndex(id: string): number | null {
-		const item = this.getItem(id);
-		return item ? this.items.indexOf(item) : null;
-	}
-	private getItemIndex(id: Item): number {
-		return this.items.indexOf(id);
-	}
-	private getId(): string {
-		return Math.random().toString().substring(2, 6);
-	}
+export type Todolist = {
+    list: () => Item[];
+    load: (newItens: Item[]) => Item[];
+    create: (item: Item) => Item;
+    toggle: (id: string) => Item | null;
+    remove: (id: string) => void;
+    updateId: (id: string, newid: string) => boolean;
+}
+export default function TodoList(itens: Item[] = [], observer?: Observable) {
 
-	toggle(id: string): Item | null {
-		const index = this.getIndex(id);
-		if (index != null && index >= 0) {
-			this.items[index].done = !this.getItem(id)!.done;
-			this.notify("update", this.items[index]);
-		}
-		return this.getItem(id);
-	}
-	remove(id: string): void {
-		const removedItem = this.getItem(id);
-		this.items = this.items.filter((item) => item.id != id);
-		this.notify("delete", removedItem);
-	}
-	updateId(id: string, newid: string): boolean {
-		let item = this.getItem(id);
-		if (!item) {
-			return false;
-		}
-		item.id = newid;
-		return true;
-	}
+    const getIndex = (id: string): number | null => {
+        const item = getItem(id);
+        return item ? itens.indexOf(item) : null;
+    }
+
+    const getItemIndex = (id: Item): number => {
+        return itens.indexOf(id);
+    }
+    const getId = (): string => {
+        return Math.random().toString().substring(2, 6);
+    }
+
+    const getItem = (id: string): Item | null => {
+        const [item] = itens.filter(({ id: todo }) => todo == id);
+        return item || null;
+    }
+
+    const list = (): Item[] => {
+        return itens.concat([]);
+    }
+    const load = (newItens: Item[]) => {
+        itens = [...itens, ...newItens];
+        return [...itens];
+    }
+    const create = (item: Item): Item => {
+        itens.push(item);
+        return item;
+    }
+
+    const toggle = (id: string): Item | null => {
+        let target = null;
+        itens = itens.map(item => {
+            if (item.id == id) {
+                target = { ...item, done: !item.done };
+                return target
+            }
+            return item;
+        });
+        if (target) {
+            observer?.notify("update", target);
+        }
+        return target;
+    }
+
+    const remove = (id: string): void => {
+        const removedItem = getItem(id);
+        itens = itens.filter((item) => item.id != id);
+        observer?.notify("delete", removedItem);
+    }
+
+    const updateId = (id: string, newid: string): boolean => {
+        let item = getItem(id);
+        if (!item) {
+            return false;
+        }
+        item.id = newid;
+        return true;
+    }
+    return { list, load, create, toggle, remove, updateId }
 }

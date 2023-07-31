@@ -1,5 +1,5 @@
 import { textSpanEnd } from 'typescript';
-import TodoList from '../entities/Todolist';
+import TodoList from '../../pages/api/todos/Todolist';
 
 describe('Todo list unit test', () => {
   let sut: TodoList;
