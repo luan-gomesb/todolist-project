@@ -10,10 +10,12 @@ export default function useTodoListHook(service: Todolist): useTodoListResponse 
     const [itens, setItens] = useState<Item[]>([]);
 
     // registerEvents(todolist);
-    const dispatch = (action: TodoActions, payload: any) => {
+    const dispatch = async (action: TodoActions, payload: any) => {
         switch (action) {
             case "create":
+                console.log(payload)
                 service.create(payload.item);
+
                 break;
             case "toggle":
                 service.toggle(payload.id);
