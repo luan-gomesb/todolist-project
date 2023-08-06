@@ -1,12 +1,12 @@
 import { createContext, useState } from "react"
+import { Todolist } from "../entities/Todolist 2";
 import useTodoListHook, { useTodoListResponse } from "../presenters/useTodoListHook";
 import TodolistService from "../Services/TodolistAPI";
-import TodoList, { Item } from "../../pages/api/todos/Todolist";
 import TodoListObserver from "../TodoListObserver";
 
 type Props = {
     children?: React.ReactNode;
-    service: TodoList
+    service: Todolist
 }
 
 const TodolistContext = createContext<useTodoListResponse | null>(null);

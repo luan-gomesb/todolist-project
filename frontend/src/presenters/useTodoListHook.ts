@@ -13,9 +13,8 @@ export default function useTodoListHook(service: Todolist): useTodoListResponse 
     const dispatch = async (action: TodoActions, payload: any) => {
         switch (action) {
             case "create":
-                console.log(payload)
+                console.log('payload', payload)
                 service.create(payload.item);
-
                 break;
             case "toggle":
                 service.toggle(payload.id);
@@ -32,6 +31,7 @@ export default function useTodoListHook(service: Todolist): useTodoListResponse 
             default:
                 break;
         }
+        console.log(service.list());
         setItens(() => service.list());
     };
     return [itens, dispatch];

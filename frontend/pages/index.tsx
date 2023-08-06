@@ -3,13 +3,9 @@ import { GetServerSidePropsContext } from "next";
 import Head from "next/head";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import TodolistView from "../src/components/TodolistView/TodolistView";
-import TodoList from "./api/todos/Todolist";
-import useTodoListHook from "../src/presenters/useFuncionList";
-import styles from "../styles/Home.module.css";
 import { TodolistContext, TodolistProvider } from "../src/contexts/TodolistContext";
 import FormTodos, { FormTodosData } from "../src/components/FormTodos/FormTodos";
 import TodolistAPI from "../src/Services/TodolistAPI";
-import { log } from "console";
 import useTodoListApi from "../src/presenters/userTodolistApi";
 import ErrorBoundary from "../src/components/ErrorBoundary/ErrorBoundary";
 type Item = {
@@ -36,7 +32,6 @@ export default function Home(props: homeProps) {
 
     async function handleAdd(data: FormTodosData) {
         let description = data.description;
-        // todosDispatch("create", { description })
         let item = await service.create({ id: null, description, done: false }) as Item;
         console.log("item:", item)
         todosDispatch("create", { item })
@@ -89,9 +84,11 @@ export const getServerSideProps = async (
     // console.log(process.env.NEXT_PUBLICAPI);
     // const response = await fetch("http://localhost:3000/api/todos");
 
+    console.log("teste");
+    console.log(context);
     const todolistapi = TodolistAPI("http://localhost:3000/api", axios);
     const response = await todolistapi.list();
-    console.log("backend:", response);
+    
     return {
         props: {
             items: response
